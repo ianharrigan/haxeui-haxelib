@@ -25,7 +25,7 @@
     <class path="C:\Servers\Haxe\haxe\lib\openfl\2,0,1\backends\native" />
     <class path="C:\Servers\Haxe\haxe\lib\haxeui\1,4,10\styles" />
     <class path="C:\Servers\Haxe\haxe\lib\haxeui\1,4,10\fonts" />
-    <class path="bin\windows\neko\haxe" />
+    <class path="bin\windows\cpp\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
