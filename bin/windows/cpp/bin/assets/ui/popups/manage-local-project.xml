@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox width="100%">
+	<style>
+		#projectTitle {
+			fontSize: 20;
+		}
+		
+		#projectVersions #text {
+			fontSize: 15;
+		}
+		
+		#projectVersions #icon {
+			verticalAlignment: "top";
+		}
+		
+		#queryUser {
+			icon: "img/user-silhouette-question.png";
+			iconPosition: "right";
+		}
+	</style>
+	<hbox width="100%">
+		<image id="projectIcon" resource="img/blue-folder-horizontal.png" width="32" height="32" />
+		<text id="projectTitle" width="100%" text="Some project" verticalAlign="center" />
+		<button id="queryUser" text="Query User" verticalAlign="center" />
+	</hbox>
+	<text id="projectDescription" width="100%" text="Some description" multiline="true" wrapLines="true" />
+	<listview width="100%" height="300" id="projectVersions" itemRenderer="haxe.ui.toolkit.core.renderers.ComponentItemRenderer"/>
+	<hbox width="100%">
+		<button id="updateToLatest" text="Upgrade to Latest" />
+		<button id="uninstall" text="Uninstall" />
+		<spacer width="100%" />
+		<button id="close" text="Close" />
+	</hbox>
+</vbox>

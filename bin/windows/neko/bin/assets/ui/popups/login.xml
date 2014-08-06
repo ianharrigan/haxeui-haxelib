@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid width="100%" columns="2">
+	<text text="Username: "/>
+	<textinput text="" width="100%" id="username" placeholderText="Enter username" />
+	
+	<text text="Password: " />
+	<textinput text="" width="100%" id="password" placeholderText="Enter password" displayAsPassword="true" />
+	
+	<spacer />
+	<checkbox id="rememberMe" text="Remember Me" />
+</grid>
