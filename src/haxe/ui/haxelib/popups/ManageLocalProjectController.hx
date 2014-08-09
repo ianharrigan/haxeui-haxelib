@@ -4,6 +4,8 @@ import haxe.ui.toolkit.controls.popups.Popup;
 import haxe.ui.toolkit.core.PopupManager;
 import haxe.ui.toolkit.core.XMLController;
 import haxe.ui.toolkit.events.UIEvent;
+import openfl.Lib;
+import openfl.net.URLRequest;
 import tools.haxelib.Data.ProjectInfos;
 
 @:build(haxe.ui.toolkit.core.Macros.buildController("assets/ui/popups/manage-local-project.xml"))
@@ -21,6 +23,10 @@ class ManageLocalProjectController extends XMLController {
 		
 		queryUser.onClick = function(e) {
 			UIManager.instance.showQueryUser(_project.remoteProject.owner);
+		};
+		
+		projectWebsite.onClick = function(e) {
+			Lib.getURL(new URLRequest(_project.remoteProject.website));
 		};
 		
 		projectVersions.onComponentEvent = function(e:UIEvent) {
@@ -65,17 +71,11 @@ class ManageLocalProjectController extends XMLController {
 		if (remoteProject.owner != null) {
 			projectTitle.text += " (" + remoteProject.owner + ")";
 		}
-		var desc:String = remoteProject.desc;
-		if (remoteProject.tags != null) {
-			desc += " (" + remoteProject.tags.join(", ") + ").";
-		}
-		if (remoteProject.website != null) {
-			desc += " " + remoteProject.website + ".";
-		}
-		if (remoteProject.license != null) {
-			desc += " Licence: " + remoteProject.license + ".";
-		}
-		projectDescription.text = desc;
+		
+		projectDescription.text = remoteProject.desc;
+		projectTags.text = "Tags: " + remoteProject.tags.join(", ");
+		projectWebsite.text = remoteProject.website;
+		projectLicense.text = "License: " + remoteProject.license;
 		
 		if (remoteProject.curversion != _project.currentVersion) {
 			projectIcon.resource = "img/blue-folder-horizontal-exclamation.png";
