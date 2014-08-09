@@ -48,7 +48,13 @@ class HaxeLibManager extends tools.haxelib.Main {
 	}
 	
 	public function queryProject(projectName:String):ProjectInfos {
-		return site.infos(projectName);
+		var infos:ProjectInfos = null;
+		try  {
+			infos = site.infos(projectName);
+		} catch (e:Dynamic) {
+			// project might not be on haxelib, e.g. if installed via haxelib git
+		}
+		return infos;
 	}
 	
 	public function listLocalProjects(filter:String = null, loadRemote:Bool = false):Array<Dynamic> {
