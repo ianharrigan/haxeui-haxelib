@@ -36,18 +36,10 @@ class RemoteFetchRunner extends Runner {
 	}
 	
 	public override function run() {
-		if (_progressBar.visible == false) {
-			_progressBar.visible = true;
-		}
-		if (_progressSpacer.visible == true) {
-			_progressSpacer.visible = false;
-		}
-		if (_progressButton.disabled == false) {
-			_progressButton.disabled = true;
-		}
-		if (_lv.disabled == false) {
-			_lv.disabled = true;
-		}
+		_progressBar.visible = true;
+		_progressSpacer.visible = false;
+		_progressButton.disabled = true;
+		_lv.disabled = true;
 		
 		_lv.dataSource.moveFirst();
 		for (x in 0..._breakIndex) {
@@ -68,22 +60,29 @@ class RemoteFetchRunner extends Runner {
 			var projectName:String = data.project.name;
 			var currentVersion:String = data.project.currentVersion;
 			var remoteProject:ProjectInfos = HaxeLibManager.instance.queryProject(projectName);
-			data.project.remoteProject = remoteProject;
-			var currentVersion:String = data.project.currentVersion;
-			if (currentVersion != remoteProject.curversion) {
-				data.componentValue = remoteProject.curversion + " Available";
-				data.icon = "img/blue-folder-horizontal-exclamation-disabled.png";
-				_outOfDateProjects++;
+			
+			if (remoteProject != null) {
+				data.project.remoteProject = remoteProject;
+				var currentVersion:String = data.project.currentVersion;
+				if (currentVersion != remoteProject.curversion) {
+					data.componentValue = remoteProject.curversion + " Available";
+					data.icon = "img/blue-folder-horizontal-exclamation-disabled.png";
+					_outOfDateProjects++;
+				} else {
+					data.icon = "img/blue-folder-horizontal-tick-disabled.png";
+				}
+				/*
+				trace(projectName + ":");
+				trace("localVersions = " + data.project.localVersions);
+				trace("remoteVersions = " + remoteInfo.versions);
+				trace("");
+				*/
+				data.subtext = remoteProject.desc;
 			} else {
-				data.icon = "img/blue-folder-horizontal-tick-disabled.png";
+				data.icon = "img/blue-folder-horizontal.png";
+				data.subtext = "";
 			}
-			/*
-			trace(projectName + ":");
-			trace("localVersions = " + data.project.localVersions);
-			trace("remoteVersions = " + remoteInfo.versions);
-			trace("");
-			*/
-			data.subtext = remoteProject.desc;
+			
 			n++;
 			x++;
 		} while (_lv.dataSource.moveNext()); 
@@ -94,7 +93,7 @@ class RemoteFetchRunner extends Runner {
 			var data:Dynamic = _lv.dataSource.get();
 			if (data.icon == "img/blue-folder-horizontal-exclamation-disabled.png") {
 				data.icon = "img/blue-folder-horizontal-exclamation.png";
-			} else {
+			} else if (data.icon != "img/blue-folder-horizontal.png") {
 				data.icon = "img/blue-folder-horizontal-tick.png";
 			}
 		} while (_lv.dataSource.moveNext()); 

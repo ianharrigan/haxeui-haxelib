@@ -14,19 +14,19 @@ class ManageLocalProjectController extends XMLController {
 	public function new(project:Dynamic) {
 		_project = project;
 		
-		refreshDetails();
-		refreshVersions();
+		if (_project.remoteProject != null) {
+			refreshDetails();
+			refreshVersions();
+			queryUser.onClick = function(e) {
+				UIManager.instance.showQueryUser(_project.remoteProject.owner);
+			};
+			projectWebsite.onClick = function(e) {
+				Lib.getURL(new URLRequest(_project.remoteProject.website));
+			};
+		}
 		
 		close.onClick = function(e) {
 			cast(view.parent.parent, Popup).clickButton(PopupButton.CLOSE);
-		};
-		
-		queryUser.onClick = function(e) {
-			UIManager.instance.showQueryUser(_project.remoteProject.owner);
-		};
-		
-		projectWebsite.onClick = function(e) {
-			Lib.getURL(new URLRequest(_project.remoteProject.website));
 		};
 		
 		projectVersions.onComponentEvent = function(e:UIEvent) {
