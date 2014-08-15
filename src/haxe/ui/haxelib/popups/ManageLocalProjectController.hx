@@ -93,9 +93,11 @@ class ManageLocalProjectController extends XMLController {
 		}
 		
 		projectDescription.text = remoteProject.desc;
-		projectTags.text = "Tags: " + remoteProject.tags.join(", ");
+		projectTags.text = remoteProject.tags.join(", ");
 		projectWebsite.text = remoteProject.website;
-		projectLicense.text = "License: " + remoteProject.license;
+		projectVersion.text = remoteProject.curversion;
+		projectOwner.text = remoteProject.owner;
+		projectLicense.text = remoteProject.license;
 		
 		if (remoteProject.curversion != _project.currentVersion) {
 			projectIcon.resource = "img/blue-folder-horizontal-exclamation.png";

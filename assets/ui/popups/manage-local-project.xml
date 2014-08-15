@@ -36,12 +36,22 @@
 		<button id="queryUser" text="Query User" verticalAlign="center" />
 	</hbox>
 	<text id="projectDescription" width="100%" text="Some description" multiline="true" wrapLines="true" />
-	<text id="projectTags" width="100%" text="Some tags" multiline="false" wrapLines="false" />
-	<hbox width="100%">
-		<text text="Website:" />
-		<button id="projectWebsite" text="Some website" />
-	</hbox>
-	<text id="projectLicense" width="100%" text="Some License" multiline="false" wrapLines="false" />
+	<grid width="100%" columns="2" style="padding:0;spacing:0;">
+		<text text="Tags: " />
+		<text id="projectTags" width="100%"/>
+		
+		<text text="Website: " />
+		<button id="projectWebsite"/>
+
+		<text text="Version: " />
+		<text id="projectVersion" width="100%"/>
+		
+		<text text="Owner: " />
+		<text id="projectOwner" width="100%"/>
+		
+		<text text="Licence: " />
+		<text id="projectLicense" width="100%"/>
+	</grid>
 	<listview width="100%" height="300" id="projectVersions" itemRenderer="haxe.ui.toolkit.core.renderers.ComponentItemRenderer"/>
 	<hbox width="100%">
 		<button id="updateToLatest" text="Upgrade to Latest" />
