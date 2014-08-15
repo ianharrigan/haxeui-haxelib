@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox width="100%">
+	<text id="header" text="Installing please wait" />
+	<hprogress id="progress" width="100%" min="0" max="100" />
+	<text id="footer" text="X/Y (Z%)" />
+	<hbox width="100%" id="buttonBar" visible="false">
+		<spacer width="100%" />
+		<button id="close" text="Close" />
+	</hbox>
+</vbox>

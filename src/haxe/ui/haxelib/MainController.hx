@@ -1,6 +1,7 @@
 package haxe.ui.haxelib;
 import haxe.ui.haxelib.popups.ManageLocalProjectController;
 import haxe.ui.haxelib.popups.QueryUserController;
+import haxe.ui.haxelib.UIManager.InstallationCompleteEvent;
 import haxe.ui.haxelib.UIManager.VersionChangedEvent;
 import haxe.ui.toolkit.containers.ListView;
 import haxe.ui.toolkit.core.interfaces.InvalidationFlag;
@@ -50,6 +51,7 @@ class MainController extends XMLController {
 		t.sendMessage(localProjects);
 		*/
 		UIManager.instance.addListener(UIManager.VERSION_CHANGED, onProjectVersionChanged);
+		UIManager.instance.addListener(UIManager.INSTALLATION_COMPLETE, onProjectInstallationComplete);
 	}
 	
 	private function modifyLocalProject(project:Dynamic):Void {
@@ -154,6 +156,26 @@ class MainController extends XMLController {
 	}
 	
 	private function onProjectVersionChanged(e:VersionChangedEvent):Void {
+		localProjects.dataSource.moveFirst();
+		do {
+			var data = localProjects.dataSource.get();
+			if (e.project.name == data.project.name) {
+				var displayName:String = e.project.name + " [" + e.project.currentVersion + "]";
+				data.text = displayName;
+				if (e.project.currentVersion != data.project.remoteProject.curversion) {
+					data.componentValue = data.project.remoteProject.curversion + " Available";
+					data.icon = "img/blue-folder-horizontal-exclamation.png";
+				} else {
+					data.componentValue = "Modify";
+					data.icon = "img/blue-folder-horizontal-tick.png";
+				}
+				localProjects.invalidate(InvalidationFlag.DATA);
+				break;
+			}
+		} while (localProjects.dataSource.moveNext());
+	}
+	
+	private function onProjectInstallationComplete(e:InstallationCompleteEvent):Void {
 		localProjects.dataSource.moveFirst();
 		do {
 			var data = localProjects.dataSource.get();

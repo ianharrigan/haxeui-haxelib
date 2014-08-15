@@ -1,5 +1,6 @@
 package haxe.ui.haxelib;
 
+import haxe.ui.haxelib.popups.InstallProgressController;
 import haxe.ui.haxelib.popups.LoginController;
 import haxe.ui.haxelib.popups.ManageLocalProjectController;
 import haxe.ui.haxelib.popups.NotImplementedController;
@@ -10,7 +11,9 @@ import openfl.events.Event;
 import openfl.events.EventDispatcher;
 
 class UIManager extends EventDispatcher {
-	public static inline var VERSION_CHANGED:String = "VersionChanged";
+	public static inline var VERSION_CHANGED:String = "haxelib_VersionChanged";
+	public static inline var DOWNLOAD_PROGRESS:String = "haxelib_DownloadProgress";
+	public static inline var INSTALLATION_COMPLETE:String = "haxelib_InstallationComplete";
 	
 	private static var _instance:UIManager;
 	public static var instance(get, null):UIManager;
@@ -89,9 +92,67 @@ class UIManager extends EventDispatcher {
 	public function dispatchProjectVersionChanged(project:Dynamic):Void {
 		dispatchEvent(new VersionChangedEvent(project));
 	}
+
+	public function dispatchDownloadProgress(details:Dynamic):Void {
+		dispatchEvent(new DownloadProgressEvent(details));
+	}
+
+	public function dispatchInstallationComplete(project:Dynamic):Void {
+		dispatchEvent(new InstallationCompleteEvent(project));
+	}
 	
 	public function addListener(type:String, listener:Dynamic->Void):Void {
 		addEventListener(type, listener, false, 0, false);
+	}
+	
+	public function showInstallProgress(project:String, version:String):Void {
+		var progressPopup:InstallProgressController = new InstallProgressController(project, version);
+		var config:Dynamic = {
+			width: 450
+		}
+		PopupManager.instance.showCustom(progressPopup.view, "Installing " + project + " " + version + "", config);
+	}
+}
+
+class InstallationCompleteEvent extends Event {
+	public var project(default, default):Dynamic;
+	
+	public function new(project:Dynamic) {
+		super(UIManager.INSTALLATION_COMPLETE, false, false);
+		this.project = project;
+	}
+}
+
+class DownloadProgressEvent extends Event {
+	private var _details:Dynamic;
+	public function new(details:Dynamic) {
+		super(UIManager.DOWNLOAD_PROGRESS, false, false);
+		_details = details;
+	}
+	
+	public var cur(get, null):Int;
+	private function get_cur():Int {
+		return _details.cur;
+	}
+	
+	public var max(get, null):Int;
+	private function get_max():Int {
+		return _details.max;
+	}
+	
+	public var percent(get, null):Int;
+	private function get_percent():Int {
+		return _details.percent;
+	}
+	
+	public var speed(get, null):Int;
+	private function get_speed():Int {
+		return _details.speed;
+	}
+	
+	public var time(get, null):Int;
+	private function get_time():Int {
+		return _details.time;
 	}
 }
 

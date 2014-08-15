@@ -1,5 +1,7 @@
 package haxe.ui.haxelib.popups;
 
+import haxe.ui.haxelib.UIManager.InstallationCompleteEvent;
+import haxe.ui.haxelib.UIManager.VersionChangedEvent;
 import haxe.ui.toolkit.controls.popups.Popup;
 import haxe.ui.toolkit.core.PopupManager;
 import haxe.ui.toolkit.core.XMLController;
@@ -40,6 +42,9 @@ class ManageLocalProjectController extends XMLController {
 		uninstall.onClick = function(e) {
 			UIManager.instance.showNotImplemented();
 		}
+		
+		UIManager.instance.addListener(UIManager.VERSION_CHANGED, onProjectVersionChanged);
+		UIManager.instance.addListener(UIManager.INSTALLATION_COMPLETE, onProjectInstallComplete);
 	}
 	
 	private function setVersion(version:String):Void {
@@ -47,15 +52,30 @@ class ManageLocalProjectController extends XMLController {
 		if (hasLocalVersion == false) {
 			showSimplePopup("You do not have version " + version + " of " + _project.name + " in your local repository.\n\nDo wish to download and install it now?", "Local version not found", PopupButton.YES | PopupButton.NO, function(button) {
 				if (button == PopupButton.YES) {
-					UIManager.instance.showNotImplemented();
+					//UIManager.instance.showNotImplemented();
+					//HaxeLibManager.instance.installRemoteProject(_project.name, version);
+					UIManager.instance.showInstallProgress(_project.name, version);
 				}
 			});
 		} else {
 			HaxeLibManager.instance.setLocalVersion(_project.name, version);
 			_project.currentVersion = version;
-			refreshProject(_project);
-			
 			UIManager.instance.dispatchProjectVersionChanged(_project);
+		}
+	}
+	
+	private function onProjectVersionChanged(e:VersionChangedEvent):Void {
+		if (e.project.name == _project.name) {
+			_project.currentVersion = e.project.currentVersion;
+			refreshProject(_project);
+		}
+	}
+
+	private function onProjectInstallComplete(e:InstallationCompleteEvent):Void {
+		trace(e.project.name);
+		if (e.project.name == _project.name) {
+			_project.currentVersion = e.project.currentVersion;
+			refreshProject(_project);
 		}
 	}
 	
