@@ -17,6 +17,18 @@
 			icon: "img/user-silhouette-question.png";
 			iconPosition: "right";
 		}
+		
+		#projectWebsite {
+			color: 0x4183C4;
+			backgroundColor: 0xE9EDF5;
+			filter: null;
+			borderSize: 0;
+			padding: 0;
+		}
+		
+		#projectWebsite:over {
+			color: 0x2c5985;
+		}
 	</style>
 	<hbox width="100%">
 		<image id="projectIcon" resource="img/blue-folder-horizontal.png" width="32" height="32" />
@@ -24,6 +36,12 @@
 		<button id="queryUser" text="Query User" verticalAlign="center" />
 	</hbox>
 	<text id="projectDescription" width="100%" text="Some description" multiline="true" wrapLines="true" />
+	<text id="projectTags" width="100%" text="Some tags" multiline="false" wrapLines="false" />
+	<hbox width="100%">
+		<text text="Website:" />
+		<button id="projectWebsite" text="Some website" />
+	</hbox>
+	<text id="projectLicense" width="100%" text="Some License" multiline="false" wrapLines="false" />
 	<listview width="100%" height="300" id="projectVersions" itemRenderer="haxe.ui.toolkit.core.renderers.ComponentItemRenderer"/>
 	<hbox width="100%">
 		<button id="updateToLatest" text="Upgrade to Latest" />
