@@ -22,10 +22,11 @@ import cpp.vm.Thread;
 @:build(haxe.ui.toolkit.core.Macros.buildController("assets/ui/main.xml"))
 class MainController extends XMLController {
 	private var _caller:AsyncThreadCaller;
+	private var _listData:Array<Dynamic>;
 	
 	public function new() {
 		refreshLocalRepository();
-		refreshRemoteInfo();
+		//refreshRemoteInfo();
 		
 		refreshLocal.onClick = function(e) {
 			refreshLocalRepository();
@@ -45,6 +46,10 @@ class MainController extends XMLController {
 			}
 		};
 		addMenuHandlers();
+		
+		filter.onChange = function(_) {
+			setProjectFilter(filter.text);
+		};
 		
 		/*
 		var t = Thread.create(testFunc);
@@ -94,6 +99,7 @@ class MainController extends XMLController {
 		localProjects.dataSource.allowEvents = false;
 		var projects:Array<Dynamic> = HaxeLibManager.instance.listLocalProjects();
 		var n:Int = 0;
+		_listData = [];
 		for (project in projects) {
 			var displayName:String = project.name + " [" + project.currentVersion + "]";
 			
@@ -108,6 +114,7 @@ class MainController extends XMLController {
 			};
 			
 			localProjects.dataSource.add(o);
+			_listData.push(o);
 			n++;
 			if (n > 1) {
 				//break;
@@ -153,6 +160,20 @@ class MainController extends XMLController {
 					UIManager.instance.showNotImplemented();
 			}
 		};
+	}
+	
+	private function setProjectFilter(filter:String):Void {
+		localProjects.dataSource.removeAll();
+		localProjects.dataSource.allowEvents = false;
+		
+		for (data in _listData) {
+			var projectName:String = cast data.project.name;
+			if (projectName.indexOf(filter) != -1) {
+				localProjects.dataSource.add(data);
+			}
+		}
+		
+		localProjects.dataSource.allowEvents = true;
 	}
 	
 	private function onProjectVersionChanged(e:VersionChangedEvent):Void {
