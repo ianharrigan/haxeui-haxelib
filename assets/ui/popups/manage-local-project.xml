@@ -18,7 +18,7 @@
 			iconPosition: "right";
 		}
 		
-		#projectWebsite {
+		.link {
 			color: 0x4183C4;
 			backgroundColor: 0xE9EDF5;
 			filter: null;
@@ -26,14 +26,13 @@
 			padding: 0;
 		}
 		
-		#projectWebsite:over {
+		.link:over {
 			color: 0x2c5985;
 		}
 	</style>
 	<hbox width="100%">
 		<image id="projectIcon" resource="img/blue-folder-horizontal.png" width="32" height="32" />
 		<text id="projectTitle" width="100%" text="Some project" verticalAlign="center" />
-		<button id="queryUser" text="Query User" verticalAlign="center" />
 	</hbox>
 	<text id="projectDescription" width="100%" text="Some description" multiline="true" wrapLines="true" />
 	<grid width="100%" columns="2" style="padding:0;spacing:0;">
@@ -41,13 +40,13 @@
 		<text id="projectTags" width="100%"/>
 		
 		<text text="Website: " />
-		<button id="projectWebsite"/>
+		<button id="projectWebsite" styleName="link" />
 
 		<text text="Version: " />
 		<text id="projectVersion" width="100%"/>
 		
 		<text text="Owner: " />
-		<text id="projectOwner" width="100%"/>
+		<button id="projectOwner" styleName="link" />
 		
 		<text text="Licence: " />
 		<text id="projectLicense" width="100%"/>
