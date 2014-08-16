@@ -1,4 +1,6 @@
 package haxe.ui.haxelib;
+
+import haxe.Timer;
 import haxe.ui.haxelib.popups.ManageLocalProjectController;
 import haxe.ui.haxelib.popups.QueryUserController;
 import haxe.ui.haxelib.UIManager.InstallationCompleteEvent;
@@ -9,6 +11,7 @@ import haxe.ui.toolkit.core.PopupManager.PopupButton;
 import haxe.ui.toolkit.core.XMLController;
 import haxe.ui.toolkit.events.UIEvent;
 import haxe.ui.toolkit.util.pseudothreads.AsyncThreadCaller;
+import openfl.Lib;
 import tools.haxelib.Data.ProjectInfos;
 
 /*
@@ -23,10 +26,12 @@ import cpp.vm.Thread;
 class MainController extends XMLController {
 	private var _caller:AsyncThreadCaller;
 	private var _listData:Array<Dynamic>;
+	private var _lastFilterInput:Int;
+	private var _filterUpdateTreshold:Int = 75;
 	
 	public function new() {
 		refreshLocalRepository();
-		//refreshRemoteInfo();
+		refreshRemoteInfo();
 		
 		refreshLocal.onClick = function(e) {
 			refreshLocalRepository();
@@ -48,7 +53,15 @@ class MainController extends XMLController {
 		addMenuHandlers();
 		
 		filter.onChange = function(_) {
-			setProjectFilter(filter.text);
+			var currentTime = Lib.getTimer();
+			_lastFilterInput = currentTime;
+			
+			Timer.delay(function() {
+				// no new input since this timer was started?
+				if (_lastFilterInput == currentTime) {
+					setProjectFilter(filter.text);
+				}
+			}, _filterUpdateTreshold);
 		};
 		
 		/*
