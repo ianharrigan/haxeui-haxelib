@@ -52,6 +52,8 @@
 		<text id="title" text="Haxelib Client" />
 	</menubar>
 	
+	<textinput id="filter" placeholderText="Filter by name" horizontalAlign="right" />
+	
 	<tabview width="100%" height="100%" id="mainTabs">
 		<vbox text="Local Repository" width="100%" height="100%">
 			<listview id="localProjects" width="100%" height="100%" itemRenderer="haxe.ui.toolkit.core.renderers.ComponentItemRenderer"/>

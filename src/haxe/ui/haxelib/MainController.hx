@@ -1,4 +1,6 @@
 package haxe.ui.haxelib;
+
+import haxe.Timer;
 import haxe.ui.haxelib.popups.ManageLocalProjectController;
 import haxe.ui.haxelib.popups.QueryUserController;
 import haxe.ui.haxelib.UIManager.InstallationCompleteEvent;
@@ -9,6 +11,7 @@ import haxe.ui.toolkit.core.PopupManager.PopupButton;
 import haxe.ui.toolkit.core.XMLController;
 import haxe.ui.toolkit.events.UIEvent;
 import haxe.ui.toolkit.util.pseudothreads.AsyncThreadCaller;
+import openfl.Lib;
 import tools.haxelib.Data.ProjectInfos;
 
 /*
@@ -22,6 +25,9 @@ import cpp.vm.Thread;
 @:build(haxe.ui.toolkit.core.Macros.buildController("assets/ui/main.xml"))
 class MainController extends XMLController {
 	private var _caller:AsyncThreadCaller;
+	private var _listData:Array<Dynamic>;
+	private var _lastFilterInput:Int;
+	private var _filterUpdateTreshold:Int = 75;
 	
 	public function new() {
 		refreshLocalRepository();
@@ -45,6 +51,18 @@ class MainController extends XMLController {
 			}
 		};
 		addMenuHandlers();
+		
+		filter.onChange = function(_) {
+			var currentTime = Lib.getTimer();
+			_lastFilterInput = currentTime;
+			
+			Timer.delay(function() {
+				// no new input since this timer was started?
+				if (_lastFilterInput == currentTime) {
+					setProjectFilter(filter.text);
+				}
+			}, _filterUpdateTreshold);
+		};
 		
 		/*
 		var t = Thread.create(testFunc);
@@ -94,6 +112,7 @@ class MainController extends XMLController {
 		localProjects.dataSource.allowEvents = false;
 		var projects:Array<Dynamic> = HaxeLibManager.instance.listLocalProjects();
 		var n:Int = 0;
+		_listData = [];
 		for (project in projects) {
 			var displayName:String = project.name + " [" + project.currentVersion + "]";
 			
@@ -108,6 +127,7 @@ class MainController extends XMLController {
 			};
 			
 			localProjects.dataSource.add(o);
+			_listData.push(o);
 			n++;
 			if (n > 1) {
 				//break;
@@ -153,6 +173,20 @@ class MainController extends XMLController {
 					UIManager.instance.showNotImplemented();
 			}
 		};
+	}
+	
+	private function setProjectFilter(filter:String):Void {
+		localProjects.dataSource.removeAll();
+		localProjects.dataSource.allowEvents = false;
+		
+		for (data in _listData) {
+			var projectName:String = cast data.project.name;
+			if (projectName.indexOf(filter) != -1) {
+				localProjects.dataSource.add(data);
+			}
+		}
+		
+		localProjects.dataSource.allowEvents = true;
 	}
 	
 	private function onProjectVersionChanged(e:VersionChangedEvent):Void {

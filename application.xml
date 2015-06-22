@@ -10,7 +10,7 @@
 	
 	<window background="#FFFFFF" fps="60" />
 	<window width="800" height="600" unless="mobile" />
-	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
+	<window orientation="landscape" if="cpp" />
 	
 	<!-- classpath, haxe libs -->
 	<source path="src" />
@@ -20,7 +20,7 @@
 	
 	<!-- assets -->
 	<icon path="assets/haxe.svg" />
-	<assets path="assets" rename="assets" />
+	<assets path="assets" />
 	<assets path="assets/img" rename="img" />
 	<assets path="assets/ui" rename="ui" />
 	

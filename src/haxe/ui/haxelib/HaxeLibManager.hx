@@ -244,11 +244,9 @@ class HaxeLibManager extends tools.haxelib.Main {
 		return infos;
 	}
 	
-	public function listLocalProjects(filter:String = null, loadRemote:Bool = false):Array<Dynamic> {
+	public function listLocalProjects(loadRemote:Bool = false):Array<Dynamic> {
 		var rep = getRepository();
 		var folders = FileSystem.readDirectory(rep);
-		if ( filter != null )
-			folders = folders.filter( function (f) return f.toLowerCase().indexOf(filter.toLowerCase()) > -1 );
 		var all = [];
 		for( p in folders ) {
 			if( p.charAt(0) != "." ) {
