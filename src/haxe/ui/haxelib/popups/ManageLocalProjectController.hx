@@ -19,7 +19,7 @@ class ManageLocalProjectController extends XMLController {
 		if (_project.remoteProject != null) {
 			refreshDetails();
 			refreshVersions();
-			queryUser.onClick = function(e) {
+			projectOwner.onClick = function(e) {
 				UIManager.instance.showQueryUser(_project.remoteProject.owner);
 			};
 			projectWebsite.onClick = function(e) {
@@ -87,11 +87,8 @@ class ManageLocalProjectController extends XMLController {
 	
 	private function refreshDetails():Void {
 		var remoteProject:ProjectInfos = _project.remoteProject;
-		projectTitle.text = remoteProject.name;
-		if (remoteProject.owner != null) {
-			projectTitle.text += " (" + remoteProject.owner + ")";
-		}
 		
+		projectTitle.text = remoteProject.name;
 		projectDescription.text = remoteProject.desc;
 		projectTags.text = remoteProject.tags.join(", ");
 		projectWebsite.text = remoteProject.website;
